@@ -9,6 +9,7 @@ import com.freemex.open.api.domain.event.*;
 import com.freemex.open.api.exception.FreemexApiException;
 import com.freemex.open.api.service.ApiCallback;
 import com.freemex.open.api.utils.SignUtils;
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -19,6 +20,7 @@ import okhttp3.WebSocketListener;
 import java.io.Closeable;
 import java.io.IOException;
 import java.security.InvalidKeyException;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -156,128 +158,41 @@ public class ApiWebSocketClientImpl implements ApiWebSocketClient, Cloneable {
         return null;
     }
 
+    /**
+     * subscribe channels
+     *
+     * @param requests
+     * @return
+     */
     @Override
-    public Closeable onUserBalanceEvent(String symbols, ApiCallback<UserBalanceEvent> callback) {
-        Map<String, String> params = Maps.newHashMap();
-        params.put("symbol", symbols);
+    public Closeable onSubscribe(List<ChannelRequest> requests, ApiWebSocketListener<?> listener) {
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        String streamingUrl = config.getQuoteWsBaseUrl();
 
-        ChannelRequest request = new ChannelRequest();
-        request.setTopic(EventTopic.USER_BALANCE.getTopic());
-        request.setEvent(EventType.SUB.getType());
-        request.setParams(params);
-
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String channel = mapper.writeValueAsString(request);
-            return createUserNewWebSocket(channel, new ApiWebSocketListener<>(callback, config, UserBalanceEvent.class));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        Request.Builder requestBuilder = new Request.Builder().url(streamingUrl);
+        if (!Strings.isNullOrEmpty(config.getApiKey())) {
+            requestBuilder.addHeader(APIConstants.FM_API_KEY, config.getApiKey())
+                    .addHeader(APIConstants.FM_API_SIGN, this.sign(timestamp))
+                    .addHeader(APIConstants.FM_API_TIMESTAMP, timestamp)
+                    .addHeader("vcode", "aab");
         }
-        return null;
-    }
 
-    @Override
-    public Closeable onUserBalanceUpdateEvent(ApiCallback<UserBalanceUpdateEvent> callback) {
-        ChannelRequest request = new ChannelRequest();
-        request.setTopic(EventTopic.USER_BALANCE_UPDATE.getTopic());
-        request.setEvent(EventType.SUB.getType());
-        request.setParams(Maps.newHashMap());
+        Request conRequest = requestBuilder.build();
+        listener.setRequest(conRequest);
 
+        final WebSocket webSocket = client.newWebSocket(conRequest, listener);
         ObjectMapper mapper = new ObjectMapper();
-        try {
-            String channel = mapper.writeValueAsString(request);
-            return createUserNewWebSocket(channel, new ApiWebSocketListener<>(callback, config, UserBalanceUpdateEvent.class));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
+        requests.forEach(channelRequest -> {
+            try {
+                String channel = mapper.writeValueAsString(channelRequest);
+                webSocket.send(channel);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return createCloseable(listener, webSocket);
     }
-
-    @Override
-    public Closeable onUserOrderEvent(ApiCallback<UserOrderEvent> callback) {
-        ChannelRequest request = new ChannelRequest();
-        request.setTopic(EventTopic.USER_ORDER.getTopic());
-        request.setEvent(EventType.SUB.getType());
-        request.setParams(Maps.newHashMap());
-
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String channel = mapper.writeValueAsString(request);
-            return createUserNewWebSocket(channel, new ApiWebSocketListener<>(callback, config, UserOrderEvent.class));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public Closeable onUserOrderUpdateEvent(ApiCallback<UserOrderUpdateEvent> callback) {
-        ChannelRequest request = new ChannelRequest();
-        request.setTopic(EventTopic.USER_ORDER_UPDATE.getTopic());
-        request.setEvent(EventType.SUB.getType());
-        request.setParams(Maps.newHashMap());
-
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String channel = mapper.writeValueAsString(request);
-            return createUserNewWebSocket(channel, new ApiWebSocketListener<>(callback, config, UserOrderUpdateEvent.class));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public Closeable onUserFuturesPositionEvent(ApiCallback<UserFuturesPositionEvent> callback) {
-        ChannelRequest request = new ChannelRequest();
-        request.setTopic(EventTopic.USER_FUTURES_POSITION.getTopic());
-        request.setEvent(EventType.SUB.getType());
-        request.setParams(Maps.newHashMap());
-
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String channel = mapper.writeValueAsString(request);
-            return createUserNewWebSocket(channel, new ApiWebSocketListener<>(callback, config, UserFuturesPositionEvent.class));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public Closeable onUserFuturesPositionUpdateEvent(ApiCallback<UserFuturesPositionUpdateEvent> callback) {
-        ChannelRequest request = new ChannelRequest();
-        request.setTopic(EventTopic.USER_FUTURES_POSITION_UPDATE.getTopic());
-        request.setEvent(EventType.SUB.getType());
-        request.setParams(Maps.newHashMap());
-
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String channel = mapper.writeValueAsString(request);
-            return createUserNewWebSocket(channel, new ApiWebSocketListener<>(callback, config, UserFuturesPositionUpdateEvent.class));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public Closeable onUserTradeUpdateEvent(ApiCallback<UserTradeUpdateEvent> callback) {
-        ChannelRequest request = new ChannelRequest();
-        request.setTopic(EventTopic.USER_TRADE_UPDATE.getTopic());
-        request.setEvent(EventType.SUB.getType());
-        request.setParams(Maps.newHashMap());
-
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            String channel = mapper.writeValueAsString(request);
-            return createUserNewWebSocket(channel, new ApiWebSocketListener<>(callback, config, UserTradeUpdateEvent.class));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 
     /**
      * @deprecated This method is no longer functional.
@@ -288,22 +203,16 @@ public class ApiWebSocketClientImpl implements ApiWebSocketClient, Cloneable {
     }
 
     private Closeable createNewWebSocket(String channel, ApiWebSocketListener<?> listener) {
-        String streamingUrl = config.getQuoteWsBaseUrl();
-        Request request = new Request.Builder().url(streamingUrl).build();
-        listener.setRequest(request);
-        final WebSocket webSocket = client.newWebSocket(request, listener);
-        webSocket.send(channel);
-        return createCloseable(listener, webSocket);
-    }
-
-    private Closeable createUserNewWebSocket(String channel, ApiWebSocketListener<?> listener) {
         String timestamp = String.valueOf(System.currentTimeMillis());
-        String streamingUrl = config.getUserWsBaseUrl();
-        Request request = new Request.Builder().url(streamingUrl)
-                .addHeader(APIConstants.FM_API_KEY, config.getApiKey())
-                .addHeader(APIConstants.FM_API_SIGN, this.sign(timestamp))
-                .addHeader(APIConstants.FM_API_TIMESTAMP, timestamp)
-                .build();
+        String streamingUrl = config.getQuoteWsBaseUrl();
+        Request.Builder requestBuilder = new Request.Builder().url(streamingUrl);
+        if (!Strings.isNullOrEmpty(config.getApiKey())) {
+            requestBuilder.addHeader(APIConstants.FM_API_KEY, config.getApiKey())
+                    .addHeader(APIConstants.FM_API_SIGN, this.sign(timestamp))
+                    .addHeader(APIConstants.FM_API_TIMESTAMP, timestamp)
+                    .addHeader("vcode", "aab");
+        }
+        Request request = requestBuilder.build();
         listener.setRequest(request);
         final WebSocket webSocket = client.newWebSocket(request, listener);
         webSocket.send(channel);
@@ -326,6 +235,7 @@ public class ApiWebSocketClientImpl implements ApiWebSocketClient, Cloneable {
 
     public Closeable createCloseable(WebSocketListener listener, final WebSocket webSocket) {
         try {
+            log.info("close-========");
             return () -> {
                 final int code = 1000;
                 listener.onClosing(webSocket, code, null);

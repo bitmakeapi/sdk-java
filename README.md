@@ -1,17 +1,17 @@
-## API基本信息
+## API basic information
 
-* 接口的baseUrl: https://api.freemex.com
-* 所有接口的响应格式均为JSON格式
-* 所有时间戳均为UNIX时间，单位为毫秒
+* HTTP-baseUrl: https://api.freemex.com.
+* Requests and responses use JSON.
+* All timestamps are UNIX time in milliseconds.
 
-## HTTP返回码
+## HTTP return codes
 
-* HTTP 4XX 错误码用于指示错误的请求内容、行为、格式。
-* HTTP 403 错误码表示违反WAF限制（Web应用程序防火墙）。
-* HTTP 429 错误码表示警告访问频次超限，即将被封IP。
-* HTTP 5XX 错误码用于指示Freemex服务侧的问题。
+* HTTP 4XX return codes are used for malformed requests; the issue is on the sender's side.
+* HTTP 403 return code is used when the WAF Limit (Web Application Firewall) has been violated.
+* HTTP 429 return code is used when breaking a request rate limit.
+* HTTP 5XX return codes are used for internal errors; the issue is on Binance's side. It is important to NOT treat this as a failure operation; the execution status is UNKNOWN and could have been a success.
 
-## 接口的基本信息
+## Basic information of the interface
 
-* GET 方法的接口，参数必须在query string中发送。
-* POST 方法的接口，除规定的公共参数需在query string中发送外，接口文档中定义的参数必须使用json格式发送
+* The interface of the GET method, the parameters must be sent in the query string.
+* For the interface of the POST method, except for the specified public parameters that need to be sent in the query string, the parameters defined in the interface document must be sent in json format.

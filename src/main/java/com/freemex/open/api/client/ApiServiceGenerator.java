@@ -38,7 +38,6 @@ public class ApiServiceGenerator {
                 .readTimeout(5000, TimeUnit.MILLISECONDS)
                 .writeTimeout(5000, TimeUnit.MILLISECONDS)
                 .dispatcher(dispatcher)
-                .pingInterval(20, TimeUnit.SECONDS)
                 .build();
     }
 

@@ -12,6 +12,7 @@ import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import okio.ByteString;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -24,15 +25,13 @@ public class ApiWebSocketListener<T> extends WebSocketListener {
 
     private final ApiCallback<T> callback;
 
-    private Class<T> eventClass;
-
-    private TypeReference<T> eventTypeReference;
+    private final Class<T> eventClass;
 
     private long lastReceivedTime;
 
     private EnumConnectionState connectionState;
 
-    private WebSocket webSocket;
+    protected WebSocket webSocket;
 
     private final long websocketId;
 
@@ -40,7 +39,7 @@ public class ApiWebSocketListener<T> extends WebSocketListener {
 
     private Request request;
     private OkHttpClient client;
-    private FreemexApiConfig config;
+    private final FreemexApiConfig config;
 
     private static final String RESPONSE_CODE = "co";
     private static final String RESPONSE_MESSAGE = "m";
@@ -48,13 +47,6 @@ public class ApiWebSocketListener<T> extends WebSocketListener {
     public ApiWebSocketListener(ApiCallback<T> callback, FreemexApiConfig config, Class<T> eventClass) {
         this.callback = callback;
         this.eventClass = eventClass;
-        this.config = config;
-        websocketId = IdGenerator.getNextId();
-    }
-
-    public ApiWebSocketListener(ApiCallback<T> callback, FreemexApiConfig config, TypeReference<T> eventTypeReference) {
-        this.callback = callback;
-        this.eventTypeReference = eventTypeReference;
         this.config = config;
         websocketId = IdGenerator.getNextId();
     }
@@ -71,8 +63,8 @@ public class ApiWebSocketListener<T> extends WebSocketListener {
         return websocketId;
     }
 
-    public void setRequest(Request request) {
-        this.request = request;
+    public void setRequest(Request conRequest) {
+        request = conRequest;
     }
 
     public void setClient(OkHttpClient client) {
@@ -114,7 +106,7 @@ public class ApiWebSocketListener<T> extends WebSocketListener {
     }
 
     @Override
-    public void onOpen(WebSocket webSocket, Response response) {
+    public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
         super.onOpen(webSocket, response);
         this.webSocket = webSocket;
         log.info("web socket connected to server");
@@ -131,7 +123,7 @@ public class ApiWebSocketListener<T> extends WebSocketListener {
     }
 
     @Override
-    public void onMessage(WebSocket webSocket, ByteString bytes) {
+    public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
         lastReceivedTime = System.currentTimeMillis();
 
         String data;
@@ -147,19 +139,19 @@ public class ApiWebSocketListener<T> extends WebSocketListener {
     }
 
     @Override
-    public void onMessage(WebSocket webSocket, String text) {
+    public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
         lastReceivedTime = System.currentTimeMillis();
         processMessage(text);
     }
 
     @Override
-    public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+    public void onFailure(@NotNull WebSocket webSocket, Throwable t, Response response) {
         log.error("[Connection error]:{}", t.getMessage());
         closeOnError();
     }
 
     @Override
-    public void onClosed(WebSocket webSocket, int code, String reason) {
+    public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
         super.onClosed(webSocket, code, reason);
         log.info("web socket closed:code->{},reason->{}", code, reason);
         if (connectionState == EnumConnectionState.CONNECTED) {
@@ -170,19 +162,13 @@ public class ApiWebSocketListener<T> extends WebSocketListener {
     private T getEventData(String data) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            T event;
-            if (eventClass == null) {
-                event = mapper.readValue(data, eventTypeReference);
-            } else {
-                event = mapper.readValue(data, eventClass);
-            }
-            return event;
+            return mapper.readValue(data, eventClass);
         } catch (IOException e) {
             throw new FreemexApiException(e);
         }
     }
 
-    private void processMessage(String data) {
+    public void processMessage(String data) {
         log.debug("on message:{}", data);
         JsonParser parser = new JsonParser();
         JsonObject jsonObject = parser.parse(data).getAsJsonObject();
@@ -196,19 +182,24 @@ public class ApiWebSocketListener<T> extends WebSocketListener {
             ApiWebSocketWatcher.onClosedNormally(this);
         } else if (jsonObject.has("ping")) {
             // ping pone
-            sendPone(jsonObject, webSocket);
+            sendPone(jsonObject);
         } else if (!jsonObject.has(RESPONSE_CODE)) {
             // received data
             callback.onResponse(getEventData(data));
         }
     }
 
-    private void sendPone(JsonObject jsonObject, WebSocket webSocket) {
+    public void sendPone(JsonObject jsonObject) {
         long ts = jsonObject.get("ping").getAsLong();
         webSocket.send(String.format("{\"pong\":%d}", ts));
     }
 
-    private void closeOnError() {
+    public void sendPing() {
+        System.out.println("send ping");
+        webSocket.send(String.format("{\"ping\":%d}", System.currentTimeMillis()));
+    }
+
+    public void closeOnError() {
         if (webSocket != null) {
             this.webSocket.cancel();
             connectionState = EnumConnectionState.CLOSED_ON_ERROR;
@@ -234,7 +225,7 @@ public class ApiWebSocketListener<T> extends WebSocketListener {
      * @param depressData
      * @return
      */
-    private String decompress(byte[] depressData) {
+    public String decompress(byte[] depressData) {
         try {
             ByteArrayInputStream is = new ByteArrayInputStream(depressData);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -261,7 +252,7 @@ public class ApiWebSocketListener<T> extends WebSocketListener {
         return null;
     }
 
-    private boolean isCompressed(byte[] bytes) {
+    public boolean isCompressed(byte[] bytes) {
         if ((bytes == null) || (bytes.length < 2)) {
             return false;
         } else {

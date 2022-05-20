@@ -30,7 +30,7 @@ public class ApiWebSocketWatcher {
                         log.warn("web socket sub no response from server");
                         webSocketListener.reConnect(DELAY_ON_FAILURE);
                     }
-
+                    webSocketListener.sendPing();
                 } else if (webSocketListener.getConnectionState() == EnumConnectionState.DELAY_CONNECT) {
                     webSocketListener.reConnect();
                 } else if (webSocketListener.getConnectionState() == EnumConnectionState.CLOSED_ON_ERROR) {

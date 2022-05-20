@@ -5,6 +5,7 @@ import com.freemex.open.api.domain.event.*;
 import com.freemex.open.api.service.ApiCallback;
 
 import java.io.Closeable;
+import java.util.List;
 
 public interface ApiWebSocketClient extends Closeable {
     /**
@@ -62,19 +63,12 @@ public interface ApiWebSocketClient extends Closeable {
      */
     Closeable onBookTickerEvent(String symbols, ApiCallback<BookTickerEvent> callback);
 
-    // user:balance + order web socket
 
-    Closeable onUserBalanceEvent(String symbols, ApiCallback<UserBalanceEvent> callback);
-
-    Closeable onUserBalanceUpdateEvent(ApiCallback<UserBalanceUpdateEvent> callback);
-
-    Closeable onUserOrderEvent(ApiCallback<UserOrderEvent> callback);
-
-    Closeable onUserOrderUpdateEvent(ApiCallback<UserOrderUpdateEvent> callback);
-
-    Closeable onUserFuturesPositionEvent(ApiCallback<UserFuturesPositionEvent> callback);
-
-    Closeable onUserFuturesPositionUpdateEvent(ApiCallback<UserFuturesPositionUpdateEvent> callback);
-
-    Closeable onUserTradeUpdateEvent(ApiCallback<UserTradeUpdateEvent> callback);
+    /**
+     * subscribe channels
+     *
+     * @param requests
+     * @return
+     */
+    Closeable onSubscribe(List<ChannelRequest> requests, ApiWebSocketListener<?> listener);
 }
