@@ -1,0 +1,13 @@
+/.idea/
+/target/
+/logs/
+*.iws
+*.iml
+*.ipr
+
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
