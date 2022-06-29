@@ -1,6 +1,6 @@
 ## API basic information
 
-* HTTP-baseUrl: https://api.freemex.com.
+* HTTP-baseUrl: https://api.bitmake.com.
 * Requests and responses use JSON.
 * All timestamps are UNIX time in milliseconds.
 
@@ -15,4 +15,3 @@
 
 * The interface of the GET method, the parameters must be sent in the query string.
 * For the interface of the POST method, except for the specified public parameters that need to be sent in the query string, the parameters defined in the interface document must be sent in json format.
-
