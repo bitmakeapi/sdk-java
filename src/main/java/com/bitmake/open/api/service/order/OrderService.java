@@ -17,8 +17,8 @@ public interface OrderService {
     /**
      * cancel order
      *
-     * @param clientOrderId
-     * @param orderId
+     * @param clientOrderId custom order number (maximum length: 23 bytes)
+     * @param orderId order id
      * @return
      */
     CancelOrderResponse cancelOrder(String clientOrderId, Long orderId);
@@ -34,11 +34,22 @@ public interface OrderService {
     /**
      * Get all open orders
      *
-     * @param symbol
-     * @param orderSide
-     * @param orderType
-     * @param fromId
-     * @param limit
+     * @param symbol symbol name
+     * @param orderSide enum order side:BUY or SELL
+     * @param orderType enum order type:LIMIT,MARKET, CONDITION_LIMIT, CONDITION_MARKET
+     * @return
+     */
+    List<OrderInfoResponse> getOpenOrders(String symbol, String orderSide, String orderType);
+
+
+    /**
+     * Get all open orders
+     *
+     * @param symbol symbol name
+     * @param orderSide enum order side:BUY or SELL
+     * @param orderType enum order type:LIMIT,MARKET, CONDITION_LIMIT, CONDITION_MARKET
+     * @param fromId query start data id, default 0,null means default
+     * @param limit limit number, default 100,null means default
      * @return
      */
     List<OrderInfoResponse> getOpenOrders(String symbol, String orderSide, String orderType, Long fromId, Long limit);
@@ -46,14 +57,24 @@ public interface OrderService {
     /**
      * Get all history orders
      *
-     * @param symbol
-     * @param orderSide
-     * @param orderType
-     * @param fromId
-     * @param limit
+     * @param symbol symbol name
+     * @param orderSide enum order side:BUY or SELL
+     * @param orderType enum order type:LIMIT,MARKET, CONDITION_LIMIT, CONDITION_MARKE
+     * @param fromId query start data id, default 0,null means default
+     * @param limit limit number, default 100,null means default
      * @return
      */
     List<OrderInfoResponse> getHistoryOrders(String symbol, String orderSide, String orderType, Long fromId, Long limit);
+
+    /**
+     * Get all history orders
+     *
+     * @param symbol symbol name
+     * @param orderSide enum order side:BUY or SELL
+     * @param orderType enum order type:LIMIT,MARKET, CONDITION_LIMIT, CONDITION_MARKE
+     * @return
+     */
+    List<OrderInfoResponse> getHistoryOrders(String symbol, String orderSide, String orderType);
 
     /**
      * Fetch order by clientOrderId、orderId
@@ -67,13 +88,24 @@ public interface OrderService {
     /**
      * Get trades
      *
-     * @param symbol
-     * @param orderSide
+     * @param symbol symbol name
+     * @param orderSide enum order side:BUY or SELL
      * @param openClose OPEN or CLOSE
      * @param matchType NORMAL, ADL, LIQUIDATION, SETTLEMENT
-     * @param fromId
-     * @param limit
+     * @param fromId query start data id, default 0,null means default
+     * @param limit limit number, default 100,null means default
      * @return
      */
     List<TradeInfoResponse> getTrades(String symbol, String orderSide, String openClose, String matchType, Long fromId, Long limit);
+
+    /**
+     * Get trades
+     *
+     * @param symbol symbol name
+     * @param orderSide enum order side:BUY or SELL
+     * @param openClose OPEN or CLOSE
+     * @param matchType NORMAL, ADL, LIQUIDATION, SETTLEMENT
+     * @return
+     */
+    List<TradeInfoResponse> getTrades(String symbol, String orderSide, String openClose, String matchType);
 }

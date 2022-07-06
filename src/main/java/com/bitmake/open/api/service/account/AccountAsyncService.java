@@ -8,7 +8,7 @@ import java.util.List;
 public interface AccountAsyncService {
 
     /**
-     * Fetch account balance
+     * Fetch current account balance
      *
      * @param callback the callback that handles the response
      * @return

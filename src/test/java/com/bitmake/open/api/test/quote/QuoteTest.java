@@ -17,43 +17,49 @@ public class QuoteTest extends QuoteBaseTest {
         this.quoteService = new QuoteServiceImpl(this.config);
     }
 
+    /**
+     * quote: get  index
+     */
     @Test
     public void getQuoteIndex() {
-        QuoteResponse<List<QuoteIndex>> response = this.quoteService.getQuoteIndex(SYMBOL_FUTURE);
+        List<QuoteIndex> response = this.quoteService.getQuoteIndex(SYMBOL_FUTURE);
         toResultString("result", response);
     }
 
     /**
-     * fix
+     * quote: get depth
      */
     @Test
     public void getQuoteDepth() {
-        QuoteResponse<List<QuoteDepth>> response = this.quoteService.getQuoteDepth(SYMBOL, null, null);
+        List<QuoteDepth> response = this.quoteService.getQuoteDepth(SYMBOL, null, null);
         toResultString("result", response);
     }
 
     /**
-     * fix
+     * quote: get kline
      */
     @Test
     public void getQuoteKline() {
-        QuoteResponse<List<QuoteKline>> response = this.quoteService.getQuoteKline(SYMBOL, "1m", 10, System.currentTimeMillis());
+        List<QuoteKline> response = this.quoteService.getQuoteKline(SYMBOL, "1m", 10, System.currentTimeMillis());
         toResultString("result", response);
     }
 
     /**
-     * fix
+     * quote: get trade
      */
     @Test
     public void getQuoteTrade() {
-        QuoteResponse<List<QuoteTrade>> response = this.quoteService.getQuoteLastTrade(SYMBOL, 10);
+        List<QuoteTrade> response = this.quoteService.getQuoteLastTrade(SYMBOL, 10);
         toResultString("result", response);
     }
 
 
+    /**
+     * quote: get ticker
+     */
     @Test
     public void getQuoteTicker() {
-        QuoteResponse<List<QuoteTicker>> response = this.quoteService.getQuoteTicker(SYMBOL);
+        List<QuoteTicker> response = this.quoteService.getQuoteTicker(SYMBOL);
         toResultString("result", response);
     }
 }

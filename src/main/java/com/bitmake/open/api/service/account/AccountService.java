@@ -10,7 +10,7 @@ import java.util.List;
 public interface AccountService {
 
     /**
-     * Fetch account balance
+     * Fetch current account balance
      *
      * @return
      */
@@ -19,7 +19,7 @@ public interface AccountService {
     /**
      * Fetch margin info
      *
-     * @param symbol
+     * @param symbol symbol name. required
      * @return
      */
     MarginInfoResponse getMarginInfo(String symbol);
@@ -27,7 +27,7 @@ public interface AccountService {
     /**
      * Set position leverage
      *
-     * @param request
+     * @param request {symbol:"symbol name", leverage:10}
      * @return
      */
     SetLeverageResponse setLeverage(SetLeverageRequest request);
@@ -35,7 +35,7 @@ public interface AccountService {
     /**
      * Fetch positions
      *
-     * @param symbol
+     * @param symbol symbol name. if it is empty, all position data will be returned
      * @return
      */
     List<PositionInfoResponse> getPositions(String symbol);

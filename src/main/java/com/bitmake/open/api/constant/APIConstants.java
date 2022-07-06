@@ -57,4 +57,8 @@ public class APIConstants {
      * 心跳间隔 1分钟一次
      */
     public static final long HEART_BEAT_INTERVAL = 60 * 1000;
+
+    public static final Long DEFAULT_LIMIT = 100L;
+
+    public static final Long DEFAULT_FROM_ID = 0L;
 }

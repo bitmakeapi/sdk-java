@@ -16,7 +16,7 @@ public interface QuoteServiceRetrofit {
      * @return
      */
     @GET("/t/v1/quote/index")
-    Call<QuoteResponse<List<QuoteIndex>>> getQuoteIndex(@Query("symbol") String symbol);
+    Call<List<QuoteIndex>> getQuoteIndex(@Query("symbol") String symbol);
 
     /**
      * Fetch order book
@@ -27,7 +27,7 @@ public interface QuoteServiceRetrofit {
      * @return
      */
     @GET("/t/v1/quote/depth")
-    Call<QuoteResponse<List<QuoteDepth>>> getQuoteDepth(@Query("symbol") String symbol, @Query("dumpScale") Integer dumpScale
+    Call<List<QuoteDepth>> getQuoteDepth(@Query("symbol") String symbol, @Query("dumpScale") Integer dumpScale
             , @Query("limit") Integer limit);
 
     /**
@@ -40,7 +40,7 @@ public interface QuoteServiceRetrofit {
      * @return
      */
     @GET("/t/v1/quote/klines")
-    Call<QuoteResponse<List<QuoteKline>>> getQuoteKline(@Query("symbol") String symbol, @Query("interval") String interval
+    Call<List<QuoteKline>> getQuoteKline(@Query("symbol") String symbol, @Query("interval") String interval
             , @Query("limit") Integer limit, @Query("to") Long to);
 
     /**
@@ -51,7 +51,7 @@ public interface QuoteServiceRetrofit {
      * @return
      */
     @GET("/t/v1/quote/trades")
-    Call<QuoteResponse<List<QuoteTrade>>> getQuoteLastTrade(@Query("symbol") String symbol, @Query("limit") Integer limit);
+    Call<List<QuoteTrade>> getQuoteLastTrade(@Query("symbol") String symbol, @Query("limit") Integer limit);
 
     /**
      * Fetch quote ticker
@@ -60,5 +60,5 @@ public interface QuoteServiceRetrofit {
      * @return
      */
     @GET("/t/v1/quote/ticker")
-    Call<QuoteResponse<List<QuoteTicker>>> getQuoteTicker(@Query("symbol") String symbol);
+    Call<List<QuoteTicker>> getQuoteTicker(@Query("symbol") String symbol);
 }

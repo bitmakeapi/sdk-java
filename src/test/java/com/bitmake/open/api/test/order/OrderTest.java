@@ -71,7 +71,7 @@ public class OrderTest extends OrderBaseTest {
 
     @Test
     public void getOpenOrders() {
-        List<OrderInfoResponse> response = this.orderService.getOpenOrders(SYMBOL, EnumOrderSide.BUY.name(), EnumOrderType.LIMIT.name(), 0L, 100L);
+        List<OrderInfoResponse> response = this.orderService.getOpenOrders(SYMBOL, EnumOrderSide.BUY.name(), EnumOrderType.LIMIT.name(), null, null);
         toResultString("result", response);
     }
 

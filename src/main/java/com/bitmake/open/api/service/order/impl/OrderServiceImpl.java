@@ -1,5 +1,6 @@
 package com.bitmake.open.api.service.order.impl;
 
+import com.bitmake.open.api.constant.APIConstants;
 import com.bitmake.open.api.domain.order.*;
 import com.bitmake.open.api.service.order.OrderService;
 import com.bitmake.open.api.config.BitmakeApiConfig;
@@ -38,8 +39,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderInfoResponse> getOpenOrders(String symbol, String orderSide, String orderType) {
+        return executeSync(orderServiceRetrofit.getOpenOrders(symbol, orderSide, orderType, APIConstants.DEFAULT_FROM_ID, APIConstants.DEFAULT_LIMIT));
+    }
+
+    @Override
     public List<OrderInfoResponse> getHistoryOrders(String symbol, String orderSide, String orderType, Long fromId, Long limit) {
         return executeSync(orderServiceRetrofit.getHistoryOrders(symbol, orderSide, orderType, fromId, limit));
+    }
+
+    @Override
+    public List<OrderInfoResponse> getHistoryOrders(String symbol, String orderSide, String orderType) {
+        return executeSync(orderServiceRetrofit.getHistoryOrders(symbol, orderSide, orderType, APIConstants.DEFAULT_FROM_ID, APIConstants.DEFAULT_LIMIT));
     }
 
     @Override
@@ -50,5 +61,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<TradeInfoResponse> getTrades(String symbol, String orderSide, String openClose, String matchType, Long fromId, Long limit) {
         return executeSync(orderServiceRetrofit.getTrades(symbol, orderSide, openClose, matchType, fromId, limit));
+    }
+
+    @Override
+    public List<TradeInfoResponse> getTrades(String symbol, String orderSide, String openClose, String matchType) {
+        return executeSync(orderServiceRetrofit.getTrades(symbol, orderSide, openClose, matchType, APIConstants.DEFAULT_FROM_ID, APIConstants.DEFAULT_LIMIT));
     }
 }

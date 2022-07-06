@@ -1,6 +1,7 @@
 package com.bitmake.open.api.service.quote.impl;
 
 import com.bitmake.open.api.config.BitmakeApiConfig;
+import com.bitmake.open.api.constant.APIConstants;
 import com.bitmake.open.api.domain.quote.*;
 import com.bitmake.open.api.service.quote.QuoteService;
 
@@ -18,27 +19,42 @@ public class QuoteServiceImpl implements QuoteService {
     }
 
     @Override
-    public QuoteResponse<List<QuoteIndex>> getQuoteIndex(String symbol) {
+    public List<QuoteIndex> getQuoteIndex(String symbol) {
         return executeSync(quoteServiceRetrofit.getQuoteIndex(symbol));
     }
 
     @Override
-    public QuoteResponse<List<QuoteDepth>> getQuoteDepth(String symbol, Integer dumpScale, Integer limit) {
+    public List<QuoteDepth> getQuoteDepth(String symbol, Integer dumpScale, Integer limit) {
         return executeSync(quoteServiceRetrofit.getQuoteDepth(symbol, dumpScale, limit));
     }
 
     @Override
-    public QuoteResponse<List<QuoteKline>> getQuoteKline(String symbol, String interval, Integer limit, Long to) {
+    public List<QuoteDepth> getQuoteDepth(String symbol) {
+        return executeSync(quoteServiceRetrofit.getQuoteDepth(symbol, null, APIConstants.DEFAULT_LIMIT.intValue()));
+    }
+
+    @Override
+    public List<QuoteKline> getQuoteKline(String symbol, String interval, Integer limit, Long to) {
         return executeSync(quoteServiceRetrofit.getQuoteKline(symbol, interval, limit, to));
     }
 
     @Override
-    public QuoteResponse<List<QuoteTrade>> getQuoteLastTrade(String symbol, Integer limit) {
+    public List<QuoteKline> getQuoteKline(String symbol, String interval) {
+        return executeSync(quoteServiceRetrofit.getQuoteKline(symbol, interval, null, null));
+    }
+
+    @Override
+    public List<QuoteTrade> getQuoteLastTrade(String symbol, Integer limit) {
         return executeSync(quoteServiceRetrofit.getQuoteLastTrade(symbol, limit));
     }
 
     @Override
-    public QuoteResponse<List<QuoteTicker>> getQuoteTicker(String symbol) {
+    public List<QuoteTrade> getQuoteLastTrade(String symbol) {
+        return executeSync(quoteServiceRetrofit.getQuoteLastTrade(symbol, APIConstants.DEFAULT_LIMIT.intValue()));
+    }
+
+    @Override
+    public List<QuoteTicker> getQuoteTicker(String symbol) {
         return executeSync(quoteServiceRetrofit.getQuoteTicker(symbol));
     }
 }
