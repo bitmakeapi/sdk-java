@@ -23,12 +23,12 @@ public interface QuoteServiceRetrofit {
      *
      * @param symbol    symbol
      * @param dumpScale merged price precision, default to take the symbol precision.
-     * @param limit     Number of data items. The maximum value is 100. The default value is 100.
+     * @param depthLevel     Number of data items. The maximum value is 100. The default value is 20.
      * @return
      */
     @GET("/t/v1/quote/depth")
     Call<List<QuoteDepth>> getQuoteDepth(@Query("symbol") String symbol, @Query("dumpScale") Integer dumpScale
-            , @Query("limit") Integer limit);
+            , @Query("depthLevel") Integer depthLevel);
 
     /**
      * Fetch quote kline(candlestick)

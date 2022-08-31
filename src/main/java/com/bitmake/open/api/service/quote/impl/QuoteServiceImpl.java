@@ -24,8 +24,8 @@ public class QuoteServiceImpl implements QuoteService {
     }
 
     @Override
-    public List<QuoteDepth> getQuoteDepth(String symbol, Integer dumpScale, Integer limit) {
-        return executeSync(quoteServiceRetrofit.getQuoteDepth(symbol, dumpScale, limit));
+    public List<QuoteDepth> getQuoteDepth(String symbol, Integer dumpScale, Integer depthLevel) {
+        return executeSync(quoteServiceRetrofit.getQuoteDepth(symbol, dumpScale, depthLevel));
     }
 
     @Override

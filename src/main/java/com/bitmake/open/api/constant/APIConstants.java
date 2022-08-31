@@ -58,7 +58,7 @@ public class APIConstants {
      */
     public static final long HEART_BEAT_INTERVAL = 60 * 1000;
 
-    public static final Long DEFAULT_LIMIT = 100L;
+    public static final Long DEFAULT_LIMIT = 20L;
 
     public static final Long DEFAULT_FROM_ID = 0L;
 }

@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<CancelOrderResponse> batchCancelOrder(List<CancelOrderRequest> request) {
+    public List<BatchCancelOrderResponse> batchCancelOrder(List<CancelOrderRequest> request) {
         return executeSync(orderServiceRetrofit.batchCancelOrder(request));
     }
 
@@ -44,8 +44,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderInfoResponse> getHistoryOrders(String symbol, String orderSide, String orderType, Long fromId, Long limit) {
-        return executeSync(orderServiceRetrofit.getHistoryOrders(symbol, orderSide, orderType, fromId, limit));
+    public List<OrderInfoResponse> getHistoryOrders(String symbol, String orderSide, String orderType, Long fromIndex, Long limit) {
+        return executeSync(orderServiceRetrofit.getHistoryOrders(symbol, orderSide, orderType, fromIndex, limit));
     }
 
     @Override

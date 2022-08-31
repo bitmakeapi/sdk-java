@@ -29,7 +29,7 @@ public interface OrderService {
      * @param request
      * @return
      */
-    List<CancelOrderResponse> batchCancelOrder(List<CancelOrderRequest> request);
+    List<BatchCancelOrderResponse> batchCancelOrder(List<CancelOrderRequest> request);
 
     /**
      * Get all open orders
@@ -60,11 +60,11 @@ public interface OrderService {
      * @param symbol symbol name
      * @param orderSide enum order side:BUY or SELL
      * @param orderType enum order type:LIMIT,MARKET, CONDITION_LIMIT, CONDITION_MARKE
-     * @param fromId query start data id, default 0,null means default
+     * @param fromIndex query start data id, default 0,null means default
      * @param limit limit number, default 100,null means default
      * @return
      */
-    List<OrderInfoResponse> getHistoryOrders(String symbol, String orderSide, String orderType, Long fromId, Long limit);
+    List<OrderInfoResponse> getHistoryOrders(String symbol, String orderSide, String orderType, Long fromIndex, Long limit);
 
     /**
      * Get all history orders

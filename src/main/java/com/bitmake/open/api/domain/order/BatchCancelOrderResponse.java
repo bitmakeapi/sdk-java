@@ -6,10 +6,7 @@ import lombok.Data;
  * cancel order response
  */
 @Data
-public class CancelOrderResponse {
+public class BatchCancelOrderResponse {
     private Long orderId;
     private String cancelStatus;
-    private String orderStatus;
-    private String executedQuantity;
-    private String executedAmount;
 }

@@ -18,7 +18,7 @@ import java.util.List;
 public class OrderTest extends OrderBaseTest {
     private OrderService orderService;
 
-    private static final String CLIENT_ORDER_ID = "open-api-test-002";
+    private static final String CLIENT_ORDER_ID = "open-api-test-006";
 
     @Before
     public void before() {
@@ -32,11 +32,11 @@ public class OrderTest extends OrderBaseTest {
     @Test
     public void placeOrder() {
         PlaceOrderRequest request = new PlaceOrderRequest();
-        request.setSymbol(SYMBOL);
+        request.setSymbol(SYMBOL_FUTURE);
         request.setClientOrderId(CLIENT_ORDER_ID);
-        request.setPrice("39310.5");
-        request.setQuantity("0.016");
-        request.setOrderSide(EnumOrderSide.BUY.name());
+        request.setPrice("20256.5");
+        request.setQuantity("0.8");
+        request.setOrderSide(EnumOrderSide.SELL.name());
         request.setOrderType(EnumOrderType.LIMIT.name());
         request.setTimeInForce(EnumTimeInForce.GTC.name());
         PlaceOrderResponse response = this.orderService.placeOrder(request);
@@ -62,10 +62,15 @@ public class OrderTest extends OrderBaseTest {
         request1.setClientOrderId("open-api-test-004");
         request1.setOrderId(0L);
 
+        CancelOrderRequest request2 = new CancelOrderRequest();
+        request2.setClientOrderId("open-api-test-003");
+        request2.setOrderId(0L);
+
         requests.add(request);
         requests.add(request1);
+        requests.add(request2);
 
-        List<CancelOrderResponse> response = this.orderService.batchCancelOrder(requests);
+        List<BatchCancelOrderResponse> response = this.orderService.batchCancelOrder(requests);
         toResultString("result", response);
     }
 

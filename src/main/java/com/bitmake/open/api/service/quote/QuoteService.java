@@ -16,12 +16,12 @@ public interface QuoteService {
     /**
      * Fetch order book
      *
-     * @param symbol    symbol. required
-     * @param dumpScale Merge precision, default to take the symbol precision,null means default
-     * @param limit     Number of data items. The maximum value is 100. The default value is 100,null means default
+     * @param symbol     symbol. required
+     * @param dumpScale  Merge precision, default to take the symbol precision,null means default
+     * @param depthLevel Number of data items. The maximum value is 100. The default value is 20,null means default
      * @return
      */
-    List<QuoteDepth> getQuoteDepth(String symbol, Integer dumpScale, Integer limit);
+    List<QuoteDepth> getQuoteDepth(String symbol, Integer dumpScale, Integer depthLevel);
 
     /**
      * Fetch order book

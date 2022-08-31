@@ -37,7 +37,7 @@ public interface OrderServiceRetrofit {
      */
     @POST("/f/v1/order/batch_cancel")
     @Headers(APIConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
-    Call<List<CancelOrderResponse>> batchCancelOrder(@Body List<CancelOrderRequest> request);
+    Call<List<BatchCancelOrderResponse>> batchCancelOrder(@Body List<CancelOrderRequest> request);
 
     /**
      * get open orders
@@ -60,14 +60,14 @@ public interface OrderServiceRetrofit {
      * @param symbol
      * @param orderSide
      * @param orderType
-     * @param fromId
+     * @param fromIndex
      * @param limit
      * @return
      */
     @GET("/f/v1/historyOrders")
     @Headers(APIConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
     Call<List<OrderInfoResponse>> getHistoryOrders(@Query("symbol") String symbol, @Query("orderSide") String orderSide, @Query("orderType") String orderType
-            , @Query("fromId") Long fromId, @Query("limit") Long limit);
+            , @Query("fromIndex") Long fromIndex, @Query("limit") Long limit);
 
     /**
      * get order
