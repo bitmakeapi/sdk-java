@@ -5,6 +5,21 @@ import com.bitmake.open.api.domain.quote.*;
 import java.util.List;
 
 public interface QuoteService {
+
+    /**
+     * get server and client base info
+     *
+     * @return
+     */
+    BaseInfo getBaseInfo();
+
+    /**
+     * get all symbol info
+     *
+     * @return
+     */
+    List<SymbolInfo> getAllSymbol();
+
     /**
      * Fetch index price
      *

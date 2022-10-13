@@ -10,6 +10,22 @@ import java.util.List;
 public interface QuoteServiceRetrofit {
 
     /**
+     * get server and client base info
+     *
+     * @return
+     */
+    @GET("/t/v1/info")
+    Call<BaseInfo> getBaseInfo();
+
+    /**
+     * get all symbol
+     *
+     * @return
+     */
+    @GET("/u/v1/base/symbols")
+    Call<List<SymbolInfo>> getAllSymbol();
+
+    /**
      * Fetch index price
      *
      * @param symbol

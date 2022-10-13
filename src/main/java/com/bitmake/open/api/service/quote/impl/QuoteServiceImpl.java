@@ -19,6 +19,16 @@ public class QuoteServiceImpl implements QuoteService {
     }
 
     @Override
+    public BaseInfo getBaseInfo() {
+        return executeSync(quoteServiceRetrofit.getBaseInfo());
+    }
+
+    @Override
+    public List<SymbolInfo> getAllSymbol(){
+        return executeSync(quoteServiceRetrofit.getAllSymbol());
+    }
+
+    @Override
     public List<QuoteIndex> getQuoteIndex(String symbol) {
         return executeSync(quoteServiceRetrofit.getQuoteIndex(symbol));
     }

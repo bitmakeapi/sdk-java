@@ -3,6 +3,7 @@ package com.bitmake.open.api.test.quote;
 import com.bitmake.open.api.domain.quote.*;
 import com.bitmake.open.api.service.quote.QuoteService;
 import com.bitmake.open.api.service.quote.impl.QuoteServiceImpl;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +16,24 @@ public class QuoteTest extends QuoteBaseTest {
     public void before() {
         this.config = this.config();
         this.quoteService = new QuoteServiceImpl(this.config);
+    }
+
+    /**
+     * get base info
+     */
+    @Test
+    public void getBaseInfo() {
+        BaseInfo response = this.quoteService.getBaseInfo();
+        toResultString("result", response);
+    }
+
+    /**
+     * get all symbol
+     */
+    @Test
+    public void getAllSymbol() {
+        List<SymbolInfo> response = this.quoteService.getAllSymbol();
+        toResultString("result", response);
     }
 
     /**
