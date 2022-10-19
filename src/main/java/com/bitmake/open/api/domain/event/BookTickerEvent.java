@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Data
 public class BookTickerEvent {
-    @JsonProperty("t")
+    @JsonProperty("tp")
     private String topic;
 
     @JsonProperty("e")

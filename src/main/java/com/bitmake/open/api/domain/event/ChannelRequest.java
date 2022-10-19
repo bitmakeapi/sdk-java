@@ -9,7 +9,7 @@ import java.util.Map;
 @Data
 public class ChannelRequest {
 
-    @JsonProperty("t")
+    @JsonProperty("tp")
     private String topic;
 
     @JsonProperty("e")

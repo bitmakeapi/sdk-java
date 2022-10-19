@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Data
 public class TradeEvent {
-    @JsonProperty("t")
+    @JsonProperty("tp")
     private String topic;
 
     @JsonProperty("e")
