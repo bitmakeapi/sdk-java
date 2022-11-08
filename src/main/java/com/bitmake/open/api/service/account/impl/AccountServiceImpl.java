@@ -1,12 +1,8 @@
 package com.bitmake.open.api.service.account.impl;
 
-import com.bitmake.open.api.domain.account.SetLeverageRequest;
+import com.bitmake.open.api.domain.account.*;
 import com.bitmake.open.api.service.account.AccountService;
-import com.bitmake.open.api.domain.account.MarginInfoResponse;
-import com.bitmake.open.api.domain.account.SetLeverageResponse;
-import com.bitmake.open.api.domain.account.PositionInfoResponse;
 import com.bitmake.open.api.config.BitmakeApiConfig;
-import com.bitmake.open.api.domain.account.AccountBalanceResponse;
 
 import java.util.List;
 
@@ -22,6 +18,11 @@ public class AccountServiceImpl implements AccountService {
 
     public AccountServiceImpl(BitmakeApiConfig config) {
         accountServiceRetrofit = createService(AccountServiceRetrofit.class, config);
+    }
+
+    @Override
+    public GetApiKeyResponse getApiKey() {
+        return executeSync(accountServiceRetrofit.getApiKey());
     }
 
     @Override

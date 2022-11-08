@@ -1,17 +1,23 @@
 package com.bitmake.open.api.service.account.impl;
 
 import com.bitmake.open.api.constant.APIConstants;
-import com.bitmake.open.api.domain.account.SetLeverageRequest;
-import com.bitmake.open.api.domain.account.SetLeverageResponse;
-import com.bitmake.open.api.domain.account.AccountBalanceResponse;
-import com.bitmake.open.api.domain.account.MarginInfoResponse;
-import com.bitmake.open.api.domain.account.PositionInfoResponse;
+import com.bitmake.open.api.domain.account.*;
 import retrofit2.Call;
 import retrofit2.http.*;
 
 import java.util.List;
 
 public interface AccountServiceRetrofit {
+
+    /**
+     * Get ApiKey Info
+     *
+     * @return
+     */
+    @GET("/u/v1/account/apiKey")
+    @Headers(APIConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+    Call<GetApiKeyResponse> getApiKey();
+
     /**
      * Fetch account balance
      *

@@ -4,6 +4,11 @@ import com.bitmake.open.api.config.BitmakeApiConfig;
 import com.bitmake.open.api.exception.BitmakeApiError;
 import com.bitmake.open.api.exception.BitmakeApiException;
 import com.bitmake.open.api.security.AuthenticationInterceptor;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Dispatcher;
@@ -27,7 +32,16 @@ import java.util.concurrent.TimeUnit;
 public class ApiServiceGenerator {
 
     private static final OkHttpClient SHARED_CLIENT;
-    private static final Converter.Factory CONVERTER_FACTORY = JacksonConverterFactory.create();
+    private static final ObjectMapper objectMapper = new ObjectMapper()
+            .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            .configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .configure(SerializationFeature.FAIL_ON_UNWRAPPED_TYPE_IDENTIFIERS, false)
+            .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+            .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
+            .configure(JsonParser.Feature.ALLOW_COMMENTS, true)
+            .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+    private static final Converter.Factory CONVERTER_FACTORY = JacksonConverterFactory.create(objectMapper);
 
     static {
         Dispatcher dispatcher = new Dispatcher();

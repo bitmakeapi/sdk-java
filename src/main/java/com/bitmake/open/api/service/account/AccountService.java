@@ -10,6 +10,14 @@ import java.util.List;
 public interface AccountService {
 
     /**
+     * Get ApiKey Info
+     *
+     * @return
+     */
+    GetApiKeyResponse getApiKey();
+
+
+    /**
      * Fetch current account balance
      *
      * @return
