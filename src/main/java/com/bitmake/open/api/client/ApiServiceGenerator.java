@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.apache.commons.lang3.StringUtils;
 import retrofit2.Call;
 import retrofit2.Converter;
@@ -61,7 +62,7 @@ public class ApiServiceGenerator {
                     BitmakeApiError.class, new Annotation[0], null);
 
     public static <S> S createService(Class<S> serviceClass) {
-        return createService(serviceClass, null);
+        return createService(serviceClass, new BitmakeApiConfig());
     }
 
     public static <S> S createService(Class<S> serviceClass, BitmakeApiConfig configuration) {
@@ -69,16 +70,23 @@ public class ApiServiceGenerator {
                 .baseUrl(configuration.getEndpoint())
                 .addConverterFactory(CONVERTER_FACTORY);
 
-
-        if (configuration == null || StringUtils.isEmpty(configuration.getApiKey()) || StringUtils.isEmpty(configuration.getSecretKey())) {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        if (StringUtils.isEmpty(configuration.getApiKey()) || StringUtils.isEmpty(configuration.getSecretKey())) {
             CommonHeaderInterceptor interceptor = new CommonHeaderInterceptor();
-            OkHttpClient adaptedClient = SHARED_CLIENT.newBuilder().addInterceptor(interceptor).build();
-            retrofitBuilder.client(adaptedClient);
+            OkHttpClient.Builder adaptedClientBuilder = SHARED_CLIENT.newBuilder().addInterceptor(interceptor);
+            if (configuration.isDebugModel()) {
+                adaptedClientBuilder.addInterceptor(loggingInterceptor);
+            }
+            retrofitBuilder.client(adaptedClientBuilder.build());
         } else {
             // `adaptedClient` will use its own interceptor, but share thread pool etc with the 'parent' client
             AuthenticationInterceptor interceptor = new AuthenticationInterceptor(configuration);
-            OkHttpClient adaptedClient = SHARED_CLIENT.newBuilder().addInterceptor(interceptor).build();
-            retrofitBuilder.client(adaptedClient);
+            OkHttpClient.Builder adaptedClientBuilder = SHARED_CLIENT.newBuilder().addInterceptor(interceptor);
+            if (configuration.isDebugModel()) {
+                adaptedClientBuilder.addInterceptor(loggingInterceptor);
+            }
+            retrofitBuilder.client(adaptedClientBuilder.build());
         }
 
         Retrofit retrofit = retrofitBuilder.build();

@@ -1,5 +1,6 @@
 package com.bitmake.open.api.service;
 
+import com.bitmake.open.api.client.ApiServiceGenerator;
 import com.bitmake.open.api.constant.APIConstants;
 import com.bitmake.open.api.exception.BitmakeApiError;
 import com.bitmake.open.api.exception.BitmakeApiException;
@@ -8,8 +9,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.io.IOException;
-
-import static com.bitmake.open.api.client.ApiServiceGenerator.getApiError;
 
 public class ApiCallbackAdapter<T> implements Callback<T> {
 
@@ -30,7 +29,7 @@ public class ApiCallbackAdapter<T> implements Callback<T> {
                 return;
             }
             try {
-                BitmakeApiError apiError = getApiError(response);
+                BitmakeApiError apiError = ApiServiceGenerator.getApiError(response);
                 onFailure(call, new BitmakeApiException(apiError));
             } catch (IOException e) {
                 onFailure(call, new BitmakeApiException(e));

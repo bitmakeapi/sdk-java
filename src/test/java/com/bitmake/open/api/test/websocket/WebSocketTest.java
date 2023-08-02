@@ -1,5 +1,6 @@
 package com.bitmake.open.api.test.websocket;
 
+import com.bitmake.open.api.client.ApiServiceGenerator;
 import com.bitmake.open.api.config.BitmakeApiConfig;
 import com.bitmake.open.api.domain.CandlestickInterval;
 import com.bitmake.open.api.domain.event.ChannelRequest;
@@ -13,8 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.bitmake.open.api.client.ApiServiceGenerator.getSharedClient;
-
 public class WebSocketTest {
     public static void main(String[] args) {
 
@@ -27,7 +26,7 @@ public class WebSocketTest {
         apiConfig.setApiKey("apiKey");
         apiConfig.setSecretKey("SecretKey");
 
-        ApiWebSocketClient client = new ApiWebSocketClientImpl(getSharedClient(), apiConfig);
+        ApiWebSocketClient client = new ApiWebSocketClientImpl(ApiServiceGenerator.getSharedClient(), apiConfig);
 
         // depth
         Map<String, String> params = Maps.newHashMap();

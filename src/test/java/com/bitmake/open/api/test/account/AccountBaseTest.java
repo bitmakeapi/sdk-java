@@ -8,6 +8,7 @@ public class AccountBaseTest extends BaseTests {
         BitmakeApiConfig config = new BitmakeApiConfig();
         config.setApiKey("apiKey");
         config.setSecretKey("secretKey");
+        // config.setDebugModel(true);
         return config;
     }
 }

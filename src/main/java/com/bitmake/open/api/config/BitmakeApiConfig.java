@@ -28,6 +28,8 @@ public class BitmakeApiConfig {
 
     private boolean socketReConnect = false;
 
+    private boolean debugModel = false;
+
     public void APIConfiguration(String apiKey, String secretKey) {
         this.apiKey = apiKey;
         this.secretKey = secretKey;

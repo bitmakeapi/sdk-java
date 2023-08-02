@@ -3,9 +3,9 @@ package com.bitmake.open.api.test.account;
 import com.bitmake.open.api.domain.account.*;
 import com.bitmake.open.api.service.account.AccountAsyncService;
 import com.bitmake.open.api.service.account.AccountService;
+import com.bitmake.open.api.service.account.impl.AccountAsyncServiceImpl;
 import com.bitmake.open.api.service.account.impl.AccountServiceImpl;
 import com.bitmake.open.api.test.BaseTests;
-import com.bitmake.open.api.service.account.impl.AccountAsyncServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,6 +21,15 @@ public class AccountTest extends AccountBaseTest {
         this.config = this.config();
         this.accountService = new AccountServiceImpl(this.config);
         this.accountAsyncService = new AccountAsyncServiceImpl(config);
+    }
+
+    /**
+     * Get ApiKey
+     */
+    @Test
+    public void getApiKey() {
+        GetApiKeyResponse result = this.accountService.getApiKey();
+        toResultString("result", result);
     }
 
     /**
